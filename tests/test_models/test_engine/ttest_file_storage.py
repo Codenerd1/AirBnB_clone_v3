@@ -16,18 +16,15 @@ from models.state import State
 from models.user import User
 import json
 import os
+import pep8
 import unittest
-
 FileStorage = file_storage.FileStorage
-classes = {
-    "Amenity": Amenity, "BaseModel": BaseModel, "City": City,
-    "Place": Place, "Review": Review, "State": State, "User": User
-}
+classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
 
 
 class TestFileStorageDocs(unittest.TestCase):
     """Tests to check the documentation and style of FileStorage class"""
-
     @classmethod
     def setUpClass(cls):
         """Set up for the doc tests"""
@@ -43,8 +40,8 @@ class TestFileStorageDocs(unittest.TestCase):
     def test_pep8_conformance_test_file_storage(self):
         """Test tests/test_models/test_file_storage.py conforms to PEP8."""
         pep8s = pep8.StyleGuide(quiet=True)
-        result = pep8s.check_files(
-            ['tests/test_models/test_engine/test_file_storage.py'])
+        result = pep8s.check_files(['tests/test_models/test_engine/\
+test_file_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
@@ -73,7 +70,6 @@ class TestFileStorageDocs(unittest.TestCase):
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
-
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_all_returns_dict(self):
         """Test that all returns the FileStorage.__objects attr"""
@@ -126,23 +122,20 @@ class TestFileStorage(unittest.TestCase):
             with self.subTest(key=key, value=value):
                 instance = value()
                 storage.new(instance)
-                instance_key = instance.__class__.__name__ + "." + instance.id
+                instance.key = instance.__class__.__name__ + "." + instance.id
                 self.assertEqual(storage.get(value, instance.id), instance)
-                self.assertEqual(
-                    storage.get(
-                        value.__name__,
-                        instance.id),
-                    instance)
-                self.assertIsNone(storage.get(value, "nonexistent_id"))
+                self.assertEqual(storage.get(value.__name__, instance.id),
+                                 instance)
+                self.assertIsNone(storage.get(value, "nonexistent_id")
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    @ unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
         """Test that count returns the number of objects in storage"""
-        storage = FileStorage()
-        all_count = len(storage.all())
+        storage=FileStorage()
+        all_count=len(storage.all())
         self.assertEqual(storage.count(), all_count)
         for key, value in classes.items():
             with self.subTest(key=key, value=value):
-                count = len(storage.all(value))
+                count=len(storage.all(value))
                 self.assertEqual(storage.count(value), count)
                 self.assertEqual(storage.count(value.__name__), count)
